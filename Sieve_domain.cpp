@@ -19,7 +19,7 @@ void Sieve_parallel_domain(std::vector<int>& primes, int min, int max) {
 	fillWithPrimes_sieve(initialPrimes, min, lim);
 	primes = initialPrimes;
 
-#pragma omp parallel num_threads(6)
+#pragma omp parallel
 	{
 		std::vector<int> ranges = getRanges(omp_get_thread_num(), omp_get_num_threads(), min, max);
 		int low = ranges[0];
