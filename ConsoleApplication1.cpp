@@ -9,9 +9,9 @@
 #include "Sieve_domain.h"
 #include "Sieve_function.h"
 
-constexpr auto MIN = 100000000;
-constexpr auto MAX = 300000000;
-
+constexpr auto MIN = 2;
+constexpr auto MAX = 100000000;
+constexpr auto NUM_THREADS = 2;
 
 void printPrimesSize(std::vector<int>& primes, int min, int max) {
 	int counter = 0;
@@ -32,7 +32,7 @@ void printPrimes(std::vector<int>& primes, int min, int max) {
 
 int main(int argc, char* argv[])
 {
-	omp_set_num_threads(6);
+	omp_set_num_threads(NUM_THREADS);
 	double tstart, tstop;
 	std::vector<int> primes = { };
 
