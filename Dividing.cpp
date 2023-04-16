@@ -20,7 +20,7 @@ bool isPrime(std::vector<int>& primes, int num) {
 
 
 void fillWithPrimes_divide(std::vector<int>& primes, int min, int max) {
-	for (int num = min; num < max; num++) {
+	for (int num = 2; num < max; num++) {
 		if (isPrime(primes, num))
 			primes.push_back(num);
 	}
