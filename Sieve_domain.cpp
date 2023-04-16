@@ -1,6 +1,7 @@
 #include <vector>
 #include "Sieve_sequential.h"
 #include <omp.h>
+#include <iostream>
 
 std::vector<int> getRanges(int num_thread, int n_threads, int min, int max) {
 	int size = max - min;
