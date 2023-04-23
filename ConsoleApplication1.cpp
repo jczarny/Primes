@@ -10,8 +10,8 @@
 #include "Sieve_function.h"
 
 constexpr auto MIN = 2;
-constexpr auto MAX = 100000000;
-constexpr auto NUM_THREADS = 2;
+constexpr auto MAX = 200000000;
+constexpr auto NUM_THREADS = 6;
 
 void printPrimesSize(std::vector<int>& primes, int min, int max) {
 	int counter = 0;
@@ -30,43 +30,38 @@ void printPrimes(std::vector<int>& primes, int min, int max) {
 	std::cout << std::endl;
 }
 
+
 int main(int argc, char* argv[])
 {
 	omp_set_num_threads(NUM_THREADS);
 	double tstart, tstop;
 	std::vector<int> primes = { };
-
+	int segCap = 1500000;
 	
 	primes = { };
 	tstart = clock();
-	fillWithPrimes_sieve(primes, MIN, MAX);
+	fillWithPrimes_sieve(primes, MIN, MAX, segCap);
 	tstop = clock();
-	std::cout << "Sito sekwencyjne: " << (double) (tstop - tstart) / CLOCKS_PER_SEC << " \n";
+	std::cout << "Sito sekwencyjne: " << (tstop - tstart) / CLOCKS_PER_SEC << " \n";
 	printPrimesSize(primes, MIN, MAX);
 	//printPrimes(primes, MIN, MAX);
 	
-
-	
 	primes = { };
 	tstart = clock();
-	Sieve_parallel_domain(primes, MIN, MAX);
+	Sieve_parallel_domain(primes, MIN, MAX, segCap);
 	tstop = clock();
 	std::cout << "Sito domenowe: " << (tstop - tstart) / CLOCKS_PER_SEC << " \n";
 	printPrimesSize(primes, MIN, MAX);
 	//printPrimes(primes, MIN, MAX);
 	
-
-	
 	primes = { };
 	tstart = clock();
-	Sieve_parallel_functional(primes, MIN, MAX);
+	Sieve_parallel_functional(primes, MIN, MAX, segCap);
 	tstop = clock();
 	std::cout << "Sito funkcyjne: " << (tstop - tstart) / CLOCKS_PER_SEC << " \n";
 	printPrimesSize(primes, MIN, MAX);
 	//printPrimes(primes, MIN, MAX);
 	
-
-	/*
 	primes = { 2 };
 	tstart = clock();
 	fillWithPrimes_divide(primes, MIN, MAX);
@@ -74,5 +69,5 @@ int main(int argc, char* argv[])
 	std::cout << "Przez dzielenie: " << (tstop - tstart) / CLOCKS_PER_SEC << " \n";
 	printPrimesSize(primes, MIN, MAX);
 	//printPrimes(primes, MIN, MAX);
-	*/
+	
 }

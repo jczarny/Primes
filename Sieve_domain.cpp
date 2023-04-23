@@ -12,11 +12,10 @@ std::vector<int> getRanges(int num_thread, int n_threads, int min, int max) {
 }
 
 
-void Sieve_parallel_domain(std::vector<int>& primes, int min, int max) {
-	int segCap = int(sqrt(max - min)) * 64;
+void Sieve_parallel_domain(std::vector<int>& primes, int min, int max, int segSize) {
 	std::vector<int> initialPrimes;
 	int lim = sqrt(max);
-	fillWithPrimes_sieve(initialPrimes, min, lim);
+	fillWithPrimes_sieve(initialPrimes, 2, lim, segSize);
 	primes = initialPrimes;
 
 #pragma omp parallel
@@ -27,19 +26,16 @@ void Sieve_parallel_domain(std::vector<int>& primes, int min, int max) {
 		int size = high - low + 1;
 
 		int segLow = low + min;
-		int segHigh = low + segCap + min;
-
+		int segHigh = low + segSize + min;
 		while (segLow < segHigh) {
-			std::vector<bool> isPrimeLocally(segCap, true);
+			std::vector<bool> isPrimeLocally(segSize, true);
 
 			if (segHigh > high + min + 1)
 				segHigh = high + min + 1;
-
 			for (int i = 0; i < initialPrimes.size(); i++) {
 				int start = int(segLow / initialPrimes[i]) * initialPrimes[i];
 				if (start < segLow)
 					start += initialPrimes[i];
-
 				for (int j = start; j <= segHigh; j += initialPrimes[i]) {
 					isPrimeLocally[j - segLow] = false;
 				}
@@ -53,8 +49,8 @@ void Sieve_parallel_domain(std::vector<int>& primes, int min, int max) {
 				}
 			}
 
-			segLow += segCap;
-			segHigh += segCap;
+			segLow += segSize;
+			segHigh += segSize;
 		}
 	}
 }
